@@ -11,8 +11,10 @@ import javax.swing.JOptionPane;
 public class MayinTarlasi implements MouseListener {
 	JFrame frame;
 	Btn[][] board = new Btn[10][10];
+	int openButton;
 
 	public MayinTarlasi() {
+		openButton=0;
 		frame = new JFrame("Mayın Tarlası");
 		frame.setSize(800, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,6 +58,7 @@ public class MayinTarlasi implements MouseListener {
 					board[row][col].setIcon(new ImageIcon("src/mine.png"));
 				} else {
 					board[row][col].setText(board[row][col].getCount() + " ");
+					board[row][col].setEnabled(false);
 				}
 			}
 		}
@@ -98,7 +101,9 @@ public class MayinTarlasi implements MouseListener {
 		} else if (board[r][c].getCount() != 0) {
 			board[r][c].setText(board[r][c].getCount() + "");
 			board[r][c].setEnabled(false);
+			openButton++;
 		} else {
+			openButton++;
 			board[r][c].setEnabled(false);
 			open(r - 1, c);
 			open(r + 1, c);
@@ -115,8 +120,13 @@ public class MayinTarlasi implements MouseListener {
 
 			if (b.isMine()) {
 				JOptionPane.showMessageDialog(frame, "Mayına bastınız, oyun bitti");
+				print();
 			} else {
-                       open(b.getRow(),b.getCol());
+				open(b.getRow(), b.getCol());
+				if(openButton==(board.length*board[0].length-10)) {
+					JOptionPane.showMessageDialog(frame, "Oyunu Kazandınız.");
+				}
+				
 			}
 
 		} else if (e.getButton() == 3) {
