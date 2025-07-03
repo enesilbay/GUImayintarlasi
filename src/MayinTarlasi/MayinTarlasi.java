@@ -1,13 +1,18 @@
 package MayinTarlasi;
 
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
-public class MayinTarlasi {
+public class MayinTarlasi implements MouseListener{
 	JFrame frame;
 	Btn[][] board = new Btn[10][10];
+	
+	
 	public MayinTarlasi() {
 		 frame = new JFrame("Mayın Tarlası");
 		 frame.setSize(800, 800);
@@ -18,6 +23,7 @@ public class MayinTarlasi {
 			 for(int col=0;col<board[0].length;col++) {
 				 Btn b = new Btn(row,col);
 				 frame.add(b);
+				 b.addMouseListener(this);
 				 board[row][col]=b;
 				}
 			 }
@@ -25,6 +31,7 @@ public class MayinTarlasi {
 		 print();
 		 frame.setVisible(true);
 	}
+	
 	
 	public void generateMine() {
 		int i=0;
@@ -40,6 +47,7 @@ public class MayinTarlasi {
 			i++;
 				}}
 	
+	
 	public void print() {
 		
 		for(int row=0;row<board.length;row++) {
@@ -48,11 +56,61 @@ public class MayinTarlasi {
 				 if(board[row][col].isMine()) {
 					 board[row][col].setIcon(new ImageIcon("src/mine.png"));
 				 }
-				 
-				 
-			 
-			 }}
+			 }}}
+
+	
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Btn b = (Btn) e.getComponent();
+		if(e.getButton()==1) {
+			
+			if(b.isMine()) {
+				JOptionPane.showMessageDialog(frame, "Mayına bastınız, oyun bitti");
+				
+			}
+			
+			
+			
+			
+			System.out.println("sol tık");
+			
+		}else if(e.getButton()==3) {
+			System.out.println("sağ tık");
+			if(!b.isFlag()) {
+				b.setIcon(new ImageIcon("src/flag.png"));
+				b.setFlag(true);
+			}
+			else {
+				b.setIcon(null);
+				b.setFlag(false);
+				
+			}
+		}
 		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 	
