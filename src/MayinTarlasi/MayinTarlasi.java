@@ -28,7 +28,7 @@ public class MayinTarlasi implements MouseListener {
 		}
 		generateMine();
 		updateCount();
-		print();
+		// print();
 		frame.setVisible(true);
 	}
 
@@ -54,8 +54,8 @@ public class MayinTarlasi implements MouseListener {
 
 				if (board[row][col].isMine()) {
 					board[row][col].setIcon(new ImageIcon("src/mine.png"));
-				}else {
-					board[row][col].setText(board[row][col].getCount()+" ");
+				} else {
+					board[row][col].setText(board[row][col].getCount() + " ");
 				}
 			}
 		}
@@ -90,6 +90,24 @@ public class MayinTarlasi implements MouseListener {
 		}
 	}
 
+	public void open(int r, int c) {
+
+		if (r < 0 || r >= board.length || c < 0 || c >= board[0].length || board[r][c].getText().length() > 0
+				|| board[r][c].isEnabled() == false) {
+			return;
+		} else if (board[r][c].getCount() != 0) {
+			board[r][c].setText(board[r][c].getCount() + "");
+			board[r][c].setEnabled(false);
+		} else {
+			board[r][c].setEnabled(false);
+			open(r - 1, c);
+			open(r + 1, c);
+			open(r, c - 1);
+			open(r, c + 1);
+		}
+
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Btn b = (Btn) e.getComponent();
@@ -98,13 +116,11 @@ public class MayinTarlasi implements MouseListener {
 			if (b.isMine()) {
 				JOptionPane.showMessageDialog(frame, "Mayına bastınız, oyun bitti");
 			} else {
-
+                       open(b.getRow(),b.getCol());
 			}
 
-			System.out.println("sol tık");
-
 		} else if (e.getButton() == 3) {
-			System.out.println("sağ tık");
+
 			if (!b.isFlag()) {
 				b.setIcon(new ImageIcon("src/flag.png"));
 				b.setFlag(true);
