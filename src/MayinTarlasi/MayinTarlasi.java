@@ -8,117 +8,137 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class MayinTarlasi implements MouseListener{
+public class MayinTarlasi implements MouseListener {
 	JFrame frame;
 	Btn[][] board = new Btn[10][10];
-	
-	
-	public MayinTarlasi() {
-		 frame = new JFrame("Mayın Tarlası");
-		 frame.setSize(800, 800);
-		 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		 frame.setLayout(new GridLayout(10,10));
-		 
-		 for(int row=0;row<board.length;row++) {
-			 for(int col=0;col<board[0].length;col++) {
-				 Btn b = new Btn(row,col);
-				 frame.add(b);
-				 b.addMouseListener(this);
-				 board[row][col]=b;
-				}
-			 }
-		 generateMine();
-		 print();
-		 frame.setVisible(true);
-	}
-	
-	
-	public void generateMine() {
-		int i=0;
-		while(i<10) {
-			int randRow=(int) (Math.random() * board.length);
-			int randCol=(int) (Math.random()*board[0].length);
-			
-			while(board[randRow][randCol].isMine()) {  
-				 randRow=(int) (Math.random() * board.length);
-				 randCol=(int) (Math.random()*board[0].length);
-			}
-			board [randRow][randCol].setMine(true); 
-			i++;
-				}}
-	
-	
-	public void print() {
-		
-		for(int row=0;row<board.length;row++) {
-			 for(int col=0;col<board[0].length;col++) {
-				  
-				 if(board[row][col].isMine()) {
-					 board[row][col].setIcon(new ImageIcon("src/mine.png"));
-				 }
-			 }}}
 
-	
-	
+	public MayinTarlasi() {
+		frame = new JFrame("Mayın Tarlası");
+		frame.setSize(800, 800);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new GridLayout(10, 10));
+
+		for (int row = 0; row < board.length; row++) {
+			for (int col = 0; col < board[0].length; col++) {
+				Btn b = new Btn(row, col);
+				frame.add(b);
+				b.addMouseListener(this);
+				board[row][col] = b;
+			}
+		}
+		generateMine();
+		updateCount();
+		print();
+		frame.setVisible(true);
+	}
+
+	public void generateMine() {
+		int i = 0;
+		while (i < 10) {
+			int randRow = (int) (Math.random() * board.length);
+			int randCol = (int) (Math.random() * board[0].length);
+
+			while (board[randRow][randCol].isMine()) {
+				randRow = (int) (Math.random() * board.length);
+				randCol = (int) (Math.random() * board[0].length);
+			}
+			board[randRow][randCol].setMine(true);
+			i++;
+		}
+	}
+
+	public void print() {
+
+		for (int row = 0; row < board.length; row++) {
+			for (int col = 0; col < board[0].length; col++) {
+
+				if (board[row][col].isMine()) {
+					board[row][col].setIcon(new ImageIcon("src/mine.png"));
+				}else {
+					board[row][col].setText(board[row][col].getCount()+" ");
+				}
+			}
+		}
+	}
+
+	public void updateCount() {
+		for (int row = 0; row < board.length; row++) {
+			for (int col = 0; col < board[0].length; col++) {
+
+				if (board[row][col].isMine()) {
+
+					counting(row, col);
+				}
+
+			}
+		}
+
+	}
+
+	public void counting(int row, int col) {
+		for (int i = row - 1; i <= row + 1; i++) {
+			for (int k = col - 1; k <= col + 1; k++) {
+
+				try {
+					int value = board[i][k].getCount();
+					board[i][k].setCount(++value);
+				} catch (Exception e) {
+
+				}
+
+			}
+		}
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Btn b = (Btn) e.getComponent();
-		if(e.getButton()==1) {
-			
-			if(b.isMine()) {
+		if (e.getButton() == 1) {
+
+			if (b.isMine()) {
 				JOptionPane.showMessageDialog(frame, "Mayına bastınız, oyun bitti");
-				
+			} else {
+
 			}
-			
-			
-			
-			
+
 			System.out.println("sol tık");
-			
-		}else if(e.getButton()==3) {
+
+		} else if (e.getButton() == 3) {
 			System.out.println("sağ tık");
-			if(!b.isFlag()) {
+			if (!b.isFlag()) {
 				b.setIcon(new ImageIcon("src/flag.png"));
 				b.setFlag(true);
-			}
-			else {
+			} else {
 				b.setIcon(null);
 				b.setFlag(false);
-				
+
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
 
 }
